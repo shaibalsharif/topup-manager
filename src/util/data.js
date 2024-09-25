@@ -68,4 +68,22 @@ export const fetchData = () => {
       ],
     };
   };
-  
+
+  // /util/data.js
+
+// Mock user data
+const mockUsers = [
+  { id: 1, phone: '01521330598', password: '1234', role: 'Super Vendor' },
+  { id: 2, phone: '01978330598', password: '1234', role: 'Vendor' },
+];
+
+export const mockAxiosPost = (url, { phone, password }) => {
+  return new Promise((resolve, reject) => {
+    const user = mockUsers.find((u) => u.phone === phone && u.password === password);
+    if (user) {
+      resolve({ data: { user, token: 'mock-token-12345' } });
+    } else {
+      reject({ response: { status: 401, data: 'Invalid credentials' } });
+    }
+  });
+};

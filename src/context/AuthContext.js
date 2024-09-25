@@ -1,34 +1,61 @@
-import React, { createContext, useState, useContext } from 'react';
+// AuthContext.js
+import React, { createContext, useState, useEffect, useContext } from 'react';
 import Cookies from 'js-cookie';
+import { mockAxiosPost } from '../util/data';
 
-const AuthContext = createContext();
+export const AuthContext = createContext();
 
-export const AuthProvider = ({ children }) => {
+export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [role, setRole] = useState(null);
+  const [authToken, setAuthToken] = useState(null);
 
-  const login = (phoneNumber, password) => {
-    return new Promise((resolve, reject) => {
-      if (phoneNumber === '1234567890' && password === 'password') {
-        const userData = { phoneNumber, loggedInAt: new Date().toLocaleString() };
-        setUser(userData);
-        Cookies.set('access_token', 'dummy_token', { expires: 1 });
-        resolve(userData);
-      } else {
-        reject('Invalid credentials');
-      }
-    });
+  useEffect(() => {
+    const storedUser = Cookies.get('user');
+    const storedRole = Cookies.get('role');
+    const storedToken = Cookies.get('authToken');
+    if (storedUser && storedRole && storedToken) {
+      setUser(JSON.parse(storedUser));
+      setRole(storedRole);
+      setAuthToken(storedToken);
+    }
+  }, []);
+
+  const login = async (phone, password) => {
+    try {
+      const response = await mockAxiosPost('/login', { phone, password });
+      const { user, token } = response.data;
+      
+      setUser(user);
+      setRole(user.role);
+      setAuthToken(token);
+
+      // Store in cookies
+      Cookies.set('user', JSON.stringify(user), { expires: 7 });
+      Cookies.set('role', user.role, { expires: 7 });
+      Cookies.set('authToken', token, { expires: 7 });
+      
+      return { success: true };
+    } catch (error) {
+      return { success: false, message: error.response?.data || 'Login failed' };
+    }
   };
 
   const logout = () => {
     setUser(null);
-    Cookies.remove('access_token');
+    setRole(null);
+    setAuthToken(null);
+    Cookies.remove('user');
+    Cookies.remove('role');
+    Cookies.remove('authToken');
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, role, authToken, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
 };
-
-export const useAuth = () => useContext(AuthContext);
+export const useAuthContext = () => {
+  return useContext(AuthContext);
+};

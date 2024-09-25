@@ -1,15 +1,16 @@
+// components/Sidebar.js
 import React from 'react';
 import { Link } from 'react-router-dom';
 
 const Sidebar = () => {
   return (
-    <aside className="w-64 bg-white shadow-md">
-      <nav className="mt-4">
-        <Link to="/" className="block px-4 py-2 text-gray-700">Dashboard</Link>
-        <Link to="/sub-vendors" className="block px-4 py-2 text-gray-700">Sub-vendors</Link>
-        <Link to="/purchases" className="block px-4 py-2 text-gray-700">Purchases</Link>
-        <Link to="/balance" className="block px-4 py-2 text-gray-700">Balance</Link>
-        <Link to="/top-up" className="block px-4 py-2 text-gray-700">Top-up</Link>
+    <aside className="hidden md:flex flex-col w-64 bg-white shadow-md">
+      <nav className="flex flex-col p-4 space-y-4">
+        <Link to="/" className="text-lg font-medium">Dashboard</Link>
+        <Link to="/subvendors" className="text-lg font-medium">Sub-vendors</Link>
+        <Link to="/purchases" className="text-lg font-medium">Purchases</Link>
+        <Link to="/balance" className="text-lg font-medium">Balance</Link>
+        <Link to="/topup" className="text-lg font-medium">Top-up</Link>
       </nav>
     </aside>
   );
