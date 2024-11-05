@@ -12,6 +12,7 @@ const Header = () => {
         setOpen(state);
     };
 
+<<<<<<< Updated upstream
     const handleMenuClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -86,6 +87,19 @@ const Header = () => {
                         Logout
                     </MenuItem>
                 </Menu>
+=======
+        {/* User Profile */}
+        <div className="flex items-center w-full">
+          <Avatar src="/placeholder-user.jpg" alt="User" className="ml-4" />
+          <div className="relative w-full ">
+             <button onClick={openDialog} className="ml-2 text-blue-500">
+              Profile
+            </button> 
+            <div className="absolute right-0 top-0 w-48 bg-white rounded-md shadow-lg py-2 z-50 hidden md:block">
+              <button className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100" onClick={logout}>
+                Logout
+              </button>
+>>>>>>> Stashed changes
             </div>
 
             {/* Drawer Component */}
